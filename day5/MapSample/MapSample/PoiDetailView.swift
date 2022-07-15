@@ -8,11 +8,18 @@
 import SwiftUI
 import MapKit
 
+struct MapItem: Identifiable {
+    let id = UUID()
+    let poi: PoiItem
+}
+
 struct PoiDetailView: View {
     let poi: PoiItem
     @State var region: MKCoordinateRegion
+//    let mapItem: MapItem
     init(poi: PoiItem) {
         self.poi = poi
+//        mapItem = MapItem(poi: poi)
         region = MKCoordinateRegion(
             center: poi.location,
             span: MKCoordinateSpan(
@@ -20,6 +27,7 @@ struct PoiDetailView: View {
                 longitudeDelta: 0.01
             )
         )
+
     }
     var body: some View {
         GeometryReader { gr in
@@ -95,3 +103,9 @@ extension PoiItem {
         )
     }
 }
+
+//extension PoiItem: Identifiable {
+//    var id: ObjectIdentifier {
+//        return RESTRT_NM
+//    }
+//}

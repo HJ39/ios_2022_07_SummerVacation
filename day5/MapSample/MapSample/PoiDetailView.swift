@@ -34,10 +34,26 @@ struct PoiDetailView: View {
             ScrollView(.vertical) {
                 VStack(alignment: .leading) {
                     VStack(alignment: .leading) {
-                        PropertyView(imageName: "tram.circle", text: poi.SIGUN_NM)
-                        PropertyView(imageName: "location.circle", text: poi.SIGUN_CD)
-                        PropertyView(imageName: "fork.knife.circle", text: poi.REPRSNT_FOOD_NM)
-                        PropertyView(imageName: "phone.circle", text: poi.TASTFDPLC_TELNO)
+                        PropertyView(imageName: "tram.circle") {
+                            Text(poi.SIGUN_NM)
+                        }
+                        PropertyView(imageName: "location.circle") {
+                            Text(poi.SIGUN_CD)
+                        }
+                        PropertyView(imageName: "fork.knife.circle") {
+                            Text(poi.REPRSNT_FOOD_NM)
+                        }
+                        PropertyView(imageName: "phone.circle") {
+                            Button {
+                                let strUrl = "tel://" + poi.TASTFDPLC_TELNO
+                                guard let url = URL(string: strUrl) else {
+                                    return
+                                }
+                                UIApplication.shared.open(url)
+                            } label: {
+                                Text(poi.TASTFDPLC_TELNO)
+                            }
+                        }
                     }
                     .padding()
                     .background(Color.purple).opacity(0.3)
@@ -81,16 +97,16 @@ struct PoiDetailView_Previews: PreviewProvider {
         "}"
 }
 
-struct PropertyView: View {
+struct PropertyView<Content: View>: View {
     let imageName: String
-    let text: String
+    let content: ()->Content
     
     var body: some View {
         HStack {
             Image(systemName: imageName)
                 .resizable()
                 .frame(width: 30, height: 30)
-            Text(text)
+            content()
         }
     }
 }

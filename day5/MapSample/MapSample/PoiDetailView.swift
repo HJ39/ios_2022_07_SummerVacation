@@ -10,20 +10,40 @@ import MapKit
 
 struct PoiDetailView: View {
     let poi: PoiItem
+    @State var region: MKCoordinateRegion
+    init(poi: PoiItem) {
+        self.poi = poi
+        region = MKCoordinateRegion(
+            center: poi.location,
+            span: MKCoordinateSpan(
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01
+            )
+        )
+    }
     var body: some View {
         GeometryReader { gr in
             ScrollView(.vertical) {
                 VStack(alignment: .leading) {
-                    Group {
+                    VStack(alignment: .leading) {
                         PropertyView(imageName: "tram.circle", text: poi.SIGUN_NM)
                         PropertyView(imageName: "location.circle", text: poi.SIGUN_CD)
                         PropertyView(imageName: "fork.knife.circle", text: poi.REPRSNT_FOOD_NM)
                         PropertyView(imageName: "phone.circle", text: poi.TASTFDPLC_TELNO)
                     }
-//                    Map(coordinateRegion: <#T##Binding<MKCoordinateRegion>#>)
+                    .padding()
+                    .background(Color.purple).opacity(0.3)
+                    .padding()
+                    Map(coordinateRegion: $region)
+                        .frame(
+                            width: gr.size.width,
+                            height: gr.size.height / 2
+                        )
                 }
             }
         }
+        .navigationTitle(poi.RESTRT_NM)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -64,5 +84,14 @@ struct PropertyView: View {
                 .frame(width: 30, height: 30)
             Text(text)
         }
+    }
+}
+
+extension PoiItem {
+    var location: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(
+            latitude: Double(REFINE_WGS84_LAT)!,
+            longitude: Double(REFINE_WGS84_LOGT)!
+        )
     }
 }

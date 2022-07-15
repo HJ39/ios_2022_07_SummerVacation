@@ -34,7 +34,7 @@ struct PoiItemView: View {
     let poi: PoiItem
     var body: some View {
         NavigationLink {
-            Text("\(poi.RESTRT_NM)")
+            PoiDetailView(poi: poi)
         } label: {
             HStack {
                 Image(systemName: "fork.knife.circle")
